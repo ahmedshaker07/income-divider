@@ -16,7 +16,7 @@ function App() {
 
   React.useEffect(
     () => {
-      axios.get("http://localhost:5000/api/categories/")
+      axios.get("https://income-divider.herokuapp.com/api/categories")
         .then(res => {
           setCategories(res.data)
         })
@@ -25,7 +25,7 @@ function App() {
     , [])
 
   const handleSubmit = (e) => {
-    axios.put("http://localhost:5000/api/categories/assign", {
+    axios.put("https://income-divider.herokuapp.com/api/categories/assign", {
       income: e.target.incomeValue.value
     })
       .then(() => {
@@ -35,7 +35,7 @@ function App() {
   }
   const handleDeduct = (event) => {
     event.preventDefault();
-    axios.put("http://localhost:5000/api/categories/deduct", {
+    axios.put("https://income-divider.herokuapp.com/api/categories/deduct", {
       category: selectedCategory,
       deductionValue: event.target.deductionValue.value
     })
@@ -47,7 +47,7 @@ function App() {
 
   const handleAdd = (event) => {
     event.preventDefault();
-    axios.put("http://localhost:5000/api/categories/addValue", {
+    axios.put("https://income-divider.herokuapp.com/api/categories/addValue", {
       category: selectedCategory,
       addedValue: event.target.addedValue.value
     })
@@ -58,7 +58,7 @@ function App() {
   }
 
   const handleReset = () => {
-    axios.put("http://localhost:5000/api/categories/reset")
+    axios.put("https://income-divider.herokuapp.com/api/categories/reset")
       .then(() => {
         history.go(0);
       })
@@ -67,7 +67,7 @@ function App() {
 
   const handleUpdate = (e) => {
     e.preventDefault()
-    axios.put("http://localhost:5000/api/categories/edit", {
+    axios.put("https://income-divider.herokuapp.com/api/categories/edit", {
       id: editMode,
       name: e.target.name.value,
       value: e.target.value.value,
@@ -80,7 +80,7 @@ function App() {
   }
 
   const handleDelete = (categoryID) => {
-    axios.delete("http://localhost:5000/api/categories/", {
+    axios.delete("https://income-divider.herokuapp.com/api/categories/", {
       data: {
         id: categoryID,
       }
@@ -92,7 +92,7 @@ function App() {
   }
   const handleAddCategory = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:5000/api/categories/add", {
+    axios.post("https://income-divider.herokuapp.com/api/categories/add", {
       name: e.target.categoryName.value,
       value: e.target.categoryValue.value,
       amount: 0
