@@ -1,6 +1,6 @@
 import './App.css';
 import { useHistory } from "react-router-dom";
-import Header from "./components/Header/Header.js";
+// import Header from "./components/Header/Header.js";
 // import Footer from "./components/Footer/Footer";
 import React, { useState } from 'react';
 import axios from "axios";
@@ -105,7 +105,7 @@ function App() {
 
   return (
     <div>
-      <Header color="dark" fixed />
+      {/* <Header color="dark" fixed /> */}
       <div style={{ height: "100vh", justifyContent: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>
         <div>
           <form onSubmit={handleSubmit}>
