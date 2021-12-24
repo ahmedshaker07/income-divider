@@ -38,23 +38,37 @@ function App() {
   const handleDeduct = (event) => {
     event.preventDefault();
     let url= ""
+    let url2= ""
     process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/deduct": url="https://income-divider.herokuapp.com/api/categories/deduct"
+    process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/items/add": url2="https://income-divider.herokuapp.com/api/items/add"
     axios.put(url, {
       category: selectedCategory,
       deductionValue: event.target.deductionValue.value
     })
+      .catch((err) => alert(err))
+    axios.post(url2, {
+      describtion: event.target.deductionValueDesc.value,
+      value: event.target.deductionValue.value
+    })
       .then(() => {
-        history.go(0)
+        history.go(0);
       })
       .catch((err) => alert(err))
   }
   const handleAdd = (event) => {
     event.preventDefault();
     let url= ""
+    let url2= ""
     process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/addValue": url="https://income-divider.herokuapp.com/api/categories/addValue"
+    process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/items/add": url2="https://income-divider.herokuapp.com/api/items/add"
     axios.put(url, {
       category: selectedCategory,
       addedValue: event.target.addedValue.value
+    })
+      .catch((err) => alert(err))
+    axios.post(url2, {
+      describtion: event.target.addedValueDesc.value,
+      value: event.target.addedValue.value
     })
       .then(() => {
         history.go(0);
@@ -146,17 +160,17 @@ function App() {
                 </form>
                 :
                 <div className='category' key={index} >
-                  <p>{category.name}</p>
-                  <p>{category.value} %</p>
-                  <p>{Math.round(category.amount)} EGP</p>
+                  <p>Name: {category.name} || Percentage {category.value} % || Amount {Math.round(category.amount)} EGP</p>
                   <form onSubmit={handleAdd}>
-                    <input id="addedValue" type="number" required placeholder="Add Value"></input>
+                    <input id="addedValue" type="number" required placeholder="Add Value"/>
+                    <input id="addedValueDesc" required placeholder="Describtion"/>
                     <button type="submit" onClick={() => { setSelectedCategory(category.name) }}>
                       +
                     </button>
                   </form>
                   <form onSubmit={handleDeduct}>
-                    <input id="deductionValue" type="number" required placeholder="Deduction"></input>
+                    <input id="deductionValue" type="number" required placeholder="Deduction"/>
+                    <input id="deductionValueDesc" required placeholder="Describtion"/>
                     <button type="submit" onClick={() => { setSelectedCategory(category.name) }}>
                       -
                     </button>
