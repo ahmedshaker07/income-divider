@@ -2,12 +2,23 @@ import './App.css';
 import { useHistory } from "react-router-dom";
 import React, { useState } from 'react';
 import axios from "axios";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+import { tableCellClasses } from '@mui/material/TableCell';
 
 function App() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [editMode, setEditMode] = useState("");
   const [addCategory, setAddCategory] = useState(false);
+  const [rows, setRows] = useState([]);
+
   let history = useHistory();
   let totalPercentage = 0;
   let totalMoney = 0;
@@ -16,12 +27,20 @@ function App() {
   React.useEffect(
     () => {
       let url= ""
+      let url2= ""
       process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories": url="https://income-divider.herokuapp.com/api/categories"
+      process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/items": url2="https://income-divider.herokuapp.com/api/items"
       axios.get(url)
         .then(res => {
           setCategories(res.data)
         })
         .catch((err) => alert(err))
+      axios.get(url2)
+        .then(res => {
+          setRows(res.data)
+        })
+        .catch((err) => alert(err))
+      
     }
   , [])
   const handleSubmit = (e) => {
@@ -117,6 +136,28 @@ function App() {
       })
       .catch((err) => alert(err))
   }
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: "#3f3b3b"
+    },
+    '&:nth-of-type(even)': {
+      backgroundColor: "#575151"
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white
+    },
+    [`&.${tableCellClasses.body}`]: {
+      color: theme.palette.common.white
+    },
+  }));
+  
 
   return (
     <div>
@@ -218,6 +259,33 @@ function App() {
               </form>
             }
           </div>
+        </div>
+        <div style={{marginTop: 20}}>
+          <Paper>
+            <TableContainer sx={{ minWidth: 900, maxHeight: 400}}>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell >Describtion</StyledTableCell>
+                    <StyledTableCell >Amount</StyledTableCell>
+                  </StyledTableRow>
+                </TableHead>
+                <TableBody>
+                  {rows.map((row) => (
+                    <StyledTableRow
+                      key={row.name}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <StyledTableCell component="th" scope="row">
+                        {row.describtion}
+                      </StyledTableCell>
+                      <StyledTableCell>{row.value}</StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
         </div>
       </div>
     </div>
