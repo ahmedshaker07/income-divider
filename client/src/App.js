@@ -1,7 +1,5 @@
 import './App.css';
 import { useHistory } from "react-router-dom";
-// import Header from "./components/Header/Header.js";
-// import Footer from "./components/Footer/Footer";
 import React, { useState } from 'react';
 import axios from "axios";
 
@@ -13,19 +11,23 @@ function App() {
   let history = useHistory();
   let totalPercentage = 0;
   let totalMoney = 0;
+  let buyNow = 0;
 
   React.useEffect(
     () => {
-      axios.get("https://income-divider.herokuapp.com/api/categories")
+      let url= ""
+      process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories": url="https://income-divider.herokuapp.com/api/categories"
+      axios.get(url)
         .then(res => {
           setCategories(res.data)
         })
         .catch((err) => alert(err))
     }
-    , [])
-
+  , [])
   const handleSubmit = (e) => {
-    axios.put("https://income-divider.herokuapp.com/api/categories/assign", {
+    let url= ""
+    process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/assign": url="https://income-divider.herokuapp.com/api/categories/assign"
+    axios.put(url, {
       income: e.target.incomeValue.value
     })
       .then(() => {
@@ -35,7 +37,9 @@ function App() {
   }
   const handleDeduct = (event) => {
     event.preventDefault();
-    axios.put("https://income-divider.herokuapp.com/api/categories/deduct", {
+    let url= ""
+    process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/deduct": url="https://income-divider.herokuapp.com/api/categories/deduct"
+    axios.put(url, {
       category: selectedCategory,
       deductionValue: event.target.deductionValue.value
     })
@@ -44,10 +48,11 @@ function App() {
       })
       .catch((err) => alert(err))
   }
-
   const handleAdd = (event) => {
     event.preventDefault();
-    axios.put("https://income-divider.herokuapp.com/api/categories/addValue", {
+    let url= ""
+    process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/addValue": url="https://income-divider.herokuapp.com/api/categories/addValue"
+    axios.put(url, {
       category: selectedCategory,
       addedValue: event.target.addedValue.value
     })
@@ -56,18 +61,11 @@ function App() {
       })
       .catch((err) => alert(err))
   }
-
-  const handleReset = () => {
-    axios.put("https://income-divider.herokuapp.com/api/categories/reset")
-      .then(() => {
-        history.go(0);
-      })
-      .catch((err) => alert(err))
-  }
-
   const handleUpdate = (e) => {
-    e.preventDefault()
-    axios.put("https://income-divider.herokuapp.com/api/categories/edit", {
+    e.preventDefault();
+    let url= "";
+    process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/edit": url="https://income-divider.herokuapp.com/api/categories/edit"
+    axios.put(url, {
       id: editMode,
       name: e.target.name.value,
       value: e.target.value.value,
@@ -78,9 +76,10 @@ function App() {
       })
       .catch((err) => alert(err))
   }
-
   const handleDelete = (categoryID) => {
-    axios.delete("https://income-divider.herokuapp.com/api/categories/", {
+    let url= ""
+    process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/": url="https://income-divider.herokuapp.com/api/categories/"
+    axios.delete(url, {
       data: {
         id: categoryID,
       }
@@ -92,7 +91,9 @@ function App() {
   }
   const handleAddCategory = (e) => {
     e.preventDefault();
-    axios.post("https://income-divider.herokuapp.com/api/categories/add", {
+    let url= ""
+    process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/add": url="https://income-divider.herokuapp.com/api/categories/add"
+    axios.post(url, {
       name: e.target.categoryName.value,
       value: e.target.categoryValue.value,
       amount: 0
@@ -105,7 +106,6 @@ function App() {
 
   return (
     <div>
-      {/* <Header color="dark" fixed /> */}
       <div style={{ height: "100vh", justifyContent: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>
         <div>
           <form onSubmit={handleSubmit}>
@@ -118,6 +118,7 @@ function App() {
           {categories.map((category, index) => {
             totalPercentage += category.value
             totalMoney += category.amount
+            buyNow= category.amount/2
             return (
               category._id === editMode ?
                 <form onSubmit={handleUpdate} key={index} style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -138,27 +139,26 @@ function App() {
                     <button type="submit">
                       Update
                     </button>
-
                     <button type="button" onClick={() => { setEditMode("") }}>
                       Cancel
                     </button>
                   </div>
                 </form>
                 :
-                <div key={index}>
+                <div className='category' key={index} >
                   <p>{category.name}</p>
                   <p>{category.value} %</p>
                   <p>{Math.round(category.amount)} EGP</p>
                   <form onSubmit={handleAdd}>
                     <input id="addedValue" type="number" required placeholder="Add Value"></input>
                     <button type="submit" onClick={() => { setSelectedCategory(category.name) }}>
-                      Add
+                      +
                     </button>
                   </form>
                   <form onSubmit={handleDeduct}>
                     <input id="deductionValue" type="number" required placeholder="Deduction"></input>
                     <button type="submit" onClick={() => { setSelectedCategory(category.name) }}>
-                      Deduct
+                      -
                     </button>
                   </form>
                   <button onClick={() => { setEditMode(category._id) }}>
@@ -179,6 +179,9 @@ function App() {
           </small>
           <small>
             Total Earnings = {totalMoney}
+          </small>
+          <small>
+            Max Buy Now = {buyNow}
           </small>
           <div>
             {!addCategory ?
@@ -202,25 +205,7 @@ function App() {
             }
           </div>
         </div>
-        <button style={{
-          position: "absolute", bottom: 10, left: 10, backgroundColor: "red",
-          border: "1px solid black", padding: 10, color: "white", cursor: "pointer"
-        }}
-          onClick={() => { handleReset() }}>
-          Reset
-        </button>
-        <a style={{
-          position: "absolute", bottom: 10, right: 10, backgroundColor: "transparent",
-          border: "1px solid black", padding: 10, color: "black", cursor: "pointer",
-          textDecoration: "none"
-        }}
-          rel="noreferrer"
-          target="_blank"
-          href="https://www.desmos.com/scientific">
-          Calculator
-        </a>
       </div>
-      {/* <Footer /> */}
     </div>
   );
 }
