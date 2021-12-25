@@ -260,9 +260,9 @@ function App() {
             }
           </div>
         </div>
-        <div style={{marginTop: 20}}>
+        <div style={{marginTop: 20,width: "70%"}}>
           <Paper>
-            <TableContainer sx={{ minWidth: 900, maxHeight: 400}}>
+            <TableContainer sx={{maxHeight: 400}}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                   <StyledTableRow>
