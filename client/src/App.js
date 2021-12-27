@@ -161,7 +161,7 @@ function App() {
 
   return (
     <div>
-      <div style={{ height: "100vh", justifyContent: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>
+      <div style={{ minHeight: "100vh", justifyContent: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>
         <div>
           <form onSubmit={handleSubmit}>
             <input required type="number" id="incomeValue" placeholder="Income"></input>
