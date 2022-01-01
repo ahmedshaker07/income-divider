@@ -268,6 +268,7 @@ function App() {
                   <StyledTableRow>
                     <StyledTableCell >Describtion</StyledTableCell>
                     <StyledTableCell >Amount</StyledTableCell>
+                    <StyledTableCell >Date</StyledTableCell>
                   </StyledTableRow>
                 </TableHead>
                 <TableBody>
@@ -280,6 +281,7 @@ function App() {
                         {row.describtion}
                       </StyledTableCell>
                       <StyledTableCell>{row.value}</StyledTableCell>
+                      <StyledTableCell>{String(row.date).substring(0,10)}</StyledTableCell>
                     </StyledTableRow>
                   ))}
                 </TableBody>

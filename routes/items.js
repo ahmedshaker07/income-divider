@@ -10,8 +10,9 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
   const describtion = req.body.describtion;
   const value = req.body.value;
+  const date = Date.now();
 
-  const newItem = new Item({ describtion, value });
+  const newItem = new Item({ describtion, value, date });
   newItem.save()
     .then(res.status(200).send())
     .catch(err => res.status(400).json('Error: ' + err))

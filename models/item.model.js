@@ -7,6 +7,9 @@ const itemSchema = new Schema({
   },
   value: {
     type: Number,
+  },
+  date:{
+    type: Date
   }
 });
 const Item = mongoose.model('Item', itemSchema);
