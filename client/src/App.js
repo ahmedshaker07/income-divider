@@ -37,7 +37,7 @@ function App() {
         .catch((err) => alert(err))
       axios.get(url2)
         .then(res => {
-          setRows(res.data)
+          setRows(res.data.reverse())
         })
         .catch((err) => alert(err))
       
