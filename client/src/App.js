@@ -18,6 +18,8 @@ function App() {
   const [editMode, setEditMode] = useState("");
   const [addCategory, setAddCategory] = useState(false);
   const [rows, setRows] = useState([]);
+  const [spentThisMonth, setSpentThisMonth] = useState(0);
+  const [spentLastMonth, setSpentLastMonth] = useState(0);
 
   let history = useHistory();
   let totalPercentage = 0;
@@ -28,8 +30,10 @@ function App() {
     () => {
       let url= ""
       let url2= ""
+      let url3= ""
       process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories": url="https://income-divider.herokuapp.com/api/categories"
       process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/items": url2="https://income-divider.herokuapp.com/api/items"
+      process.env.NODE_ENV==="development"? url3="http://localhost:5000/api/users/": url3="https://income-divider.herokuapp.com/api/users/"
       axios.get(url)
         .then(res => {
           setCategories(res.data)
@@ -40,10 +44,35 @@ function App() {
           setRows(res.data.reverse())
         })
         .catch((err) => alert(err))
-      
+      axios.get(url3)
+        .then(res => {
+          setSpentThisMonth(res.data.spentThisMonth)
+          setSpentLastMonth(res.data.spentLastMonth)
+        })
+        .catch((err) => alert(err))
     }
   , [])
-  const handleSubmit = (e) => {
+  const handleSubmitSalary = (e) => {
+    let url= ""
+    process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/assign": url="https://income-divider.herokuapp.com/api/categories/assign"
+    let url2= ""
+    process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/users/": url2="https://income-divider.herokuapp.com/api/users/"
+    axios.put(url, {
+      income: e.target.incomeValue.value
+    })
+    .catch((err) => alert(err))
+
+    axios.put(url2, {
+      newSpent: spentThisMonth
+    })
+    .then(() => {
+      history.go(0)
+    })
+    .catch((err) => alert(err))
+      
+  }
+
+  const handleSubmitIncome = (e) => {
     let url= ""
     process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/assign": url="https://income-divider.herokuapp.com/api/categories/assign"
     axios.put(url, {
@@ -54,12 +83,15 @@ function App() {
       })
       .catch((err) => alert(err))
   }
+
   const handleDeduct = (event) => {
     event.preventDefault();
     let url= ""
     let url2= ""
+    let url3= ""
     process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/deduct": url="https://income-divider.herokuapp.com/api/categories/deduct"
     process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/items/add": url2="https://income-divider.herokuapp.com/api/items/add"
+    process.env.NODE_ENV==="development"? url3="http://localhost:5000/api/users/spentThisMonth": url3="https://income-divider.herokuapp.com/api/users/spentThisMonth"
     axios.put(url, {
       category: selectedCategory,
       deductionValue: event.target.deductionValue.value
@@ -69,6 +101,10 @@ function App() {
       describtion: event.target.deductionValueDesc.value,
       value: event.target.deductionValue.value
     })
+      .catch((err) => alert(err))
+    axios.put(url3, {
+      spent: event.target.deductionValue.value
+    })
       .then(() => {
         history.go(0);
       })
@@ -77,22 +113,25 @@ function App() {
   const handleAdd = (event) => {
     event.preventDefault();
     let url= ""
-    let url2= ""
+    // let url2= ""
     process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/addValue": url="https://income-divider.herokuapp.com/api/categories/addValue"
-    process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/items/add": url2="https://income-divider.herokuapp.com/api/items/add"
+    // process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/items/add": url2="https://income-divider.herokuapp.com/api/items/add"
     axios.put(url, {
       category: selectedCategory,
       addedValue: event.target.addedValue.value
-    })
-      .catch((err) => alert(err))
-    axios.post(url2, {
-      describtion: event.target.addedValueDesc.value,
-      value: event.target.addedValue.value
     })
       .then(() => {
         history.go(0);
       })
       .catch((err) => alert(err))
+    // axios.post(url2, {
+    //   describtion: event.target.addedValueDesc.value,
+    //   value: event.target.addedValue.value
+    // })
+    //   .then(() => {
+    //     history.go(0);
+    //   })
+    //   .catch((err) => alert(err))
   }
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -160,10 +199,13 @@ function App() {
   
 
   return (
-    <div>
       <div style={{ minHeight: "100vh", justifyContent: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>
         <div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitSalary}>
+            <input required type="number" id="incomeValue" placeholder="Salary"></input>
+            <button type="submit">Enter</button>
+          </form>
+          <form onSubmit={handleSubmitIncome}>
             <input required type="number" id="incomeValue" placeholder="Income"></input>
             <button type="submit">Enter</button>
           </form>
@@ -203,7 +245,7 @@ function App() {
                 <div className='category' key={index} >
                   <p>Name: {category.name} || Percentage {category.value} % || Amount {Math.round(category.amount)} EGP</p>
                   <form onSubmit={handleAdd}>
-                    <input id="addedValue" type="number" required placeholder="Add Value"/>
+                    {/* <input id="addedValue" type="number" required placeholder="Add Value"/> */}
                     <input id="addedValueDesc" required placeholder="Describtion"/>
                     <button type="submit" onClick={() => { setSelectedCategory(category.name) }}>
                       +
@@ -237,6 +279,12 @@ function App() {
           </small>
           <small>
             Max Buy Now = {buyNow}
+          </small>
+          <small>
+            Spent This Month = {spentThisMonth}
+          </small>
+          <small>
+            Spent Last Month = {spentLastMonth}
           </small>
           <div>
             {!addCategory ?
@@ -290,7 +338,6 @@ function App() {
           </Paper>
         </div>
       </div>
-    </div>
   );
 }
 

@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 //routes
 app.use('/api/categories', require('./routes/categories'));
 app.use('/api/items', require('./routes/items'));
+app.use('/api/users', require('./routes/users'));
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'))
