@@ -114,10 +114,10 @@ function App() {
     event.preventDefault();
     let url= ""
     // let url2= ""
-    let url3= ""
+    // let url3= ""
     process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/addValue": url="https://income-divider.herokuapp.com/api/categories/addValue"
     // process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/items/add": url2="https://income-divider.herokuapp.com/api/items/add"
-    process.env.NODE_ENV==="development"? url3="http://localhost:5000/api/users/spentThisMonth": url3="https://income-divider.herokuapp.com/api/users/spentThisMonth"
+    // process.env.NODE_ENV==="development"? url3="http://localhost:5000/api/users/spentThisMonth": url3="https://income-divider.herokuapp.com/api/users/spentThisMonth"
     axios.put(url, {
       category: selectedCategory,
       addedValue: event.target.addedValue.value
@@ -131,13 +131,13 @@ function App() {
     //   value: event.target.addedValue.value
     // })
     //   .catch((err) => alert(err))
-    axios.put(url3, {
-      spent: event.target.addedValue.value * -1
-    })
-      .then(() => {
-        history.go(0);
-      })
-      .catch((err) => alert(err))
+    // axios.put(url3, {
+    //   spent: event.target.addedValue.value * -1
+    // })
+    //   .then(() => {
+    //     history.go(0);
+    //   })
+    //   .catch((err) => alert(err))
   }
   const handleUpdate = (e) => {
     e.preventDefault();
