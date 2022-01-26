@@ -259,7 +259,7 @@ function App() {
                       +
                     </button>
                   </form>
-                  <form hidden={category.name!="Others"}  onSubmit={handleDeduct}>
+                  <form hidden={category.name!=="Others"}  onSubmit={handleDeduct}>
                     <input id="deductionValue" type="number" required placeholder="Deduction"/>
                     <input id="deductionValueDesc" required placeholder="Describtion"/>
                     <button type="submit" onClick={() => { setSelectedCategory(category.name) }}>

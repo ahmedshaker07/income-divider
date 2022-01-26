@@ -28,7 +28,7 @@ router.route('/').put((req, res) => {
 
 router.route('/spentThisMonth').put((req, res) => {
   User.findOneAndUpdate({"username": "ahmed"},
-  { $inc: { "spentThisMonth" : req.body.spent}})
+  { $inc: { "spentThisMonth" : req.body.spent, "availableMonthlyBalance" : -req.body.spent}})
   .then(res.json("Updated"))
     .catch(err => res.status(400).json('Error: ' + err));
 });
