@@ -20,6 +20,7 @@ function App() {
   const [rows, setRows] = useState([]);
   const [spentThisMonth, setSpentThisMonth] = useState(0);
   const [spentLastMonth, setSpentLastMonth] = useState(0);
+  const [availableMonthlyBalance, setAvailableMonthlyBalance] = useState(0);
 
   let history = useHistory();
   let totalPercentage = 0;
@@ -48,6 +49,7 @@ function App() {
         .then(res => {
           setSpentThisMonth(res.data.spentThisMonth)
           setSpentLastMonth(res.data.spentLastMonth)
+          setAvailableMonthlyBalance(res.data.availableMonthlyBalance)
         })
         .catch((err) => alert(err))
     }
@@ -61,9 +63,9 @@ function App() {
       income: e.target.incomeValue.value
     })
     .catch((err) => alert(err))
-
     axios.put(url2, {
-      newSpent: spentThisMonth
+      newSpent: spentThisMonth,
+      newAvailable: e.target.incomeValue.value * 0.75
     })
     .then(() => {
       history.go(0)
@@ -285,6 +287,9 @@ function App() {
           </small>
           <small>
             Max Buy Now = {buyNow}
+          </small>
+          <small>
+            Available This Month = {availableMonthlyBalance}
           </small>
           <small>
             Spent This Month = {spentThisMonth}
