@@ -208,7 +208,7 @@ function App() {
 
   return (
       <div style={{ minHeight: "100vh", justifyContent: "center", display: "flex", alignItems: "center", flexDirection: "column" }}>
-        <div>
+        <div style={{ margin: 10}}>
           <form onSubmit={handleSubmitSalary}>
             <input required type="number" id="incomeValue" placeholder="Salary"></input>
             <button type="submit">Enter</button>
@@ -259,14 +259,14 @@ function App() {
                       +
                     </button>
                   </form>
-                  <form onSubmit={handleDeduct}>
+                  <form hidden={category.name!="Others"}  onSubmit={handleDeduct}>
                     <input id="deductionValue" type="number" required placeholder="Deduction"/>
                     <input id="deductionValueDesc" required placeholder="Describtion"/>
                     <button type="submit" onClick={() => { setSelectedCategory(category.name) }}>
                       -
                     </button>
                   </form>
-                  <button onClick={() => { setEditMode(category._id) }}>
+                  <button  style={{ margin: 10}} onClick={() => { setEditMode(category._id) }}>
                     Edit Category
                   </button>
                   <button type="button" onClick={() => {
@@ -319,7 +319,7 @@ function App() {
             }
           </div>
         </div>
-        <div style={{marginTop: 20,width: "70%"}}>
+        <div style={{margin: 30,width: "70%"}}>
           <Paper>
             <TableContainer sx={{maxHeight: 400}}>
               <Table stickyHeader aria-label="sticky table">
