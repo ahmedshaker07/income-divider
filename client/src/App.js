@@ -112,6 +112,28 @@ function App() {
       })
       .catch((err) => alert(err))
   }
+
+  const handleDeductSpecial = (event) => {
+    event.preventDefault();
+    let url= ""
+    let url2= ""
+    process.env.NODE_ENV==="development"? url="http://localhost:5000/api/categories/deduct": url="https://income-divider.herokuapp.com/api/categories/deduct"
+    process.env.NODE_ENV==="development"? url2="http://localhost:5000/api/items/add": url2="https://income-divider.herokuapp.com/api/items/add"
+    axios.put(url, {
+      category: selectedCategory,
+      deductionValue: event.target.specialDeductionValue.value
+    })
+      .catch((err) => alert(err))
+    axios.post(url2, {
+      describtion: event.target.specialDeductionValueDesc.value,
+      value: event.target.specialDeductionValue.value
+    })
+      .then(() => {
+        history.go(0);
+      })
+      .catch((err) => alert(err))
+  }
+
   const handleAdd = (event) => {
     event.preventDefault();
     let url= ""
@@ -260,8 +282,15 @@ function App() {
                     </button>
                   </form>
                   <form hidden={category.name!=="Others"}  onSubmit={handleDeduct}>
-                    <input id="deductionValue" type="number" required placeholder="Deduction"/>
+                    <input id="deductionValue" type="number" required placeholder="Deduction Value"/>
                     <input id="deductionValueDesc" required placeholder="Describtion"/>
+                    <button type="submit" onClick={() => { setSelectedCategory(category.name) }}>
+                      -
+                    </button>
+                  </form>
+                  <form hidden={category.name!=="Others"} onSubmit={handleDeductSpecial}>
+                    <input id="specialDeductionValue" type="number" required placeholder="Special Deduction Value"/>
+                    <input id="specialDeductionValueDesc" required placeholder="Describtion"/>
                     <button type="submit" onClick={() => { setSelectedCategory(category.name) }}>
                       -
                     </button>
