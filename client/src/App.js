@@ -27,6 +27,8 @@ function App() {
   let totalMoney = 0;
   let buyNow = 0;
 
+  console.log("test");
+
   React.useEffect(() => {
     let url = "";
     let url2 = "";
@@ -72,13 +74,13 @@ function App() {
       : (url2 = "https://income-divider.herokuapp.com/api/users/");
     axios
       .put(url, {
-        income: e.target.incomeValue.value,
+        income: e.target.incomeValue.value
       })
       .catch((err) => alert(err));
     axios
       .put(url2, {
         newSpent: spentThisMonth,
-        newAvailable: e.target.incomeValue.value * 0.75,
+        newAvailable: e.target.incomeValue.value * 0.75
       })
       .then(() => {
         history.go(0);
@@ -93,7 +95,7 @@ function App() {
       : (url = "https://income-divider.herokuapp.com/api/categories/assign");
     axios
       .put(url, {
-        income: e.target.incomeValue.value,
+        income: e.target.incomeValue.value
       })
       .then(() => {
         history.go(0);
@@ -119,18 +121,18 @@ function App() {
     axios
       .put(url, {
         category: selectedCategory,
-        deductionValue: event.target.deductionValue.value,
+        deductionValue: event.target.deductionValue.value
       })
       .catch((err) => alert(err));
     axios
       .post(url2, {
         describtion: event.target.deductionValueDesc.value,
-        value: event.target.deductionValue.value,
+        value: event.target.deductionValue.value
       })
       .catch((err) => alert(err));
     axios
       .put(url3, {
-        spent: event.target.deductionValue.value,
+        spent: event.target.deductionValue.value
       })
       .then(() => {
         history.go(0);
@@ -151,13 +153,13 @@ function App() {
     axios
       .put(url, {
         category: selectedCategory,
-        deductionValue: event.target.specialDeductionValue.value,
+        deductionValue: event.target.specialDeductionValue.value
       })
       .catch((err) => alert(err));
     axios
       .post(url2, {
         describtion: event.target.specialDeductionValueDesc.value,
-        value: event.target.specialDeductionValue.value,
+        value: event.target.specialDeductionValue.value
       })
       .then(() => {
         history.go(0);
@@ -178,7 +180,7 @@ function App() {
     axios
       .put(url, {
         category: selectedCategory,
-        addedValue: event.target.addedValue.value,
+        addedValue: event.target.addedValue.value
       })
       .then(() => {
         history.go(0);
@@ -208,7 +210,7 @@ function App() {
         id: editMode,
         name: e.target.name.value,
         value: e.target.value.value,
-        amount: e.target.amount.value,
+        amount: e.target.amount.value
       })
       .then(() => {
         history.go(0);
@@ -223,8 +225,8 @@ function App() {
     axios
       .delete(url, {
         data: {
-          id: categoryID,
-        },
+          id: categoryID
+        }
       })
       .then(() => {
         history.go(0);
@@ -241,7 +243,7 @@ function App() {
       .post(url, {
         name: e.target.categoryName.value,
         value: e.target.categoryValue.value,
-        amount: 0,
+        amount: 0
       })
       .then(() => {
         history.go(0);
@@ -250,24 +252,24 @@ function App() {
   };
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
-      backgroundColor: "#3f3b3b",
+      backgroundColor: "#3f3b3b"
     },
     "&:nth-of-type(even)": {
-      backgroundColor: "#575151",
+      backgroundColor: "#575151"
     },
     // hide last border
     "&:last-child td, &:last-child th": {
-      border: 0,
-    },
+      border: 0
+    }
   }));
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+      color: theme.palette.common.white
     },
     [`&.${tableCellClasses.body}`]: {
-      color: theme.palette.common.white,
-    },
+      color: theme.palette.common.white
+    }
   }));
 
   return (
@@ -277,7 +279,7 @@ function App() {
         justifyContent: "center",
         display: "flex",
         alignItems: "center",
-        flexDirection: "column",
+        flexDirection: "column"
       }}
     >
       <div style={{ margin: 10 }}>
@@ -307,7 +309,7 @@ function App() {
           flexDirection: "row",
           justifyContent: "space-evenly",
           width: "90%",
-          flexWrap: "wrap",
+          flexWrap: "wrap"
         }}
       >
         {categories.map((category, index) => {
@@ -321,7 +323,7 @@ function App() {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                justifyContent: "center"
               }}
             >
               <small style={{ textAlign: "center", margin: "3%" }}>
@@ -331,7 +333,7 @@ function App() {
                 style={{
                   margin: "3%",
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "column"
                 }}
               >
                 <small>Name :</small>
@@ -341,7 +343,7 @@ function App() {
                 style={{
                   margin: "3%",
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "column"
                 }}
               >
                 <small>Percentage :</small>
@@ -351,7 +353,7 @@ function App() {
                 style={{
                   margin: "3%",
                   display: "flex",
-                  flexDirection: "column",
+                  flexDirection: "column"
                 }}
               >
                 <small>Amount :</small>
@@ -365,7 +367,7 @@ function App() {
                 style={{
                   display: "flex",
                   justifyContent: "space-evenly",
-                  margin: "3%",
+                  margin: "3%"
                 }}
               >
                 <button type="submit">Update</button>
@@ -473,7 +475,7 @@ function App() {
           flexDirection: "column",
           textAlign: "center",
           justifyContent: "center",
-          marginTop: "3%",
+          marginTop: "3%"
         }}
       >
         <small style={{ color: totalPercentage === 100 ? "green" : "red" }}>
