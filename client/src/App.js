@@ -27,6 +27,8 @@ function App() {
   let totalMoney = 0;
   let buyNow = 0;
 
+  console.log("test");
+
   React.useEffect(() => {
     let url = "";
     let url2 = "";
